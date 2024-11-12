@@ -4,10 +4,10 @@ import pandas as pd
 
 
 
-def receive(zmq_address):
+def receive():
     context = zmq.Context()
     socket = context.socket(zmq.REP)  # Use REP to receive requests
-    socket.bind(zmq_address)
+    socket.bind("tcp://localhost:5555")
     
     file = 'phzm_us_zipcode_2023.csv'
     df = pd.read_csv(file)
@@ -26,17 +26,19 @@ def receive(zmq_address):
         elif message.isdigit():
             message = int(message)
             matching_zone = df.loc[df['zipcode'] == message, 'zone'].values[0]
-            # matching_zips = df.loc[df['zone'] == matching_zone].head(5),'zipcode'
-            # matching_zips = df.loc[df['zone'] == matching_zone, 'zipcode'].head(5).reset_index(drop=True).astype(str).str.zfill(5) # Works
-            matching_zips = df.loc[df['zone'] == matching_zone, 'zipcode'].head(5).astype(str).str.zfill(5).reset_index(drop=True)
-            print(matching_zips)
-            matching_zips_json = matching_zips.to_json()
-            socket.send_string(matching_zips_json)
-            print(f"Response Message Sent: {matching_zips_json}")
-        
+            if matching_zone:
+                # matching_zips = df.loc[df['zone'] == matching_zone].head(5),'zipcode'
+                # matching_zips = df.loc[df['zone'] == matching_zone, 'zipcode'].head(5).reset_index(drop=True).astype(str).str.zfill(5) # Works
+                matching_zips = df.loc[df['zone'] == matching_zone, 'zipcode'].head(5).astype(str).str.zfill(5).reset_index(drop=True)
+                # print(matching_zips)
+                matching_zips_json = matching_zips.to_json()
+                socket.send_string(matching_zips_json)
+                print(f"Response Message Sent: {matching_zips_json}")
+            else: 
+                print(f"Unable to find zip code in phzm DB.")
+                socket.send_string("No return from phzm DB.")
         
         # Exit condition
         
 if __name__ == "__main__":
-    zmq_address_input = "tcp://localhost:5555" 
-    receive(zmq_address_input)
+    receive()
