@@ -1,10 +1,10 @@
-import pandas as pd
 from pyzipcode import ZipCodeDatabase
 import zmq
 
 def send():
     """
-    This function sends a zip code to the receive function. It is 
+    This function continuously prompts the user to send a zip code to the receive function.
+    It will keep running until the user enters 'exit'.
     """
     zcdb = ZipCodeDatabase()
     zmq_address = "tcp://localhost:5555"
@@ -16,43 +16,41 @@ def send():
         "WI", "WY"
     ]
 
-    func_input = input("Please enter a city, or a 5-digit zip code: ")
-    
     context = zmq.Context()
     socket = context.socket(zmq.REQ)
     socket.connect(zmq_address)
 
-    while not func_input:
-        func_input = input("No input detected. Please re-try entering a city or a 5-digit zip code: ")
-    if func_input.isdigit():
-        zip_code = func_input
-    else:
-        state_input = input("Please enter 2 character abbreviation for the state (No need to worry about Upper/Lower case!): ").upper()
-        while state_input not in state_abbreviations:
-            state_input = input("Invalid State entry.\nPlease enter 2 character abbreviation for the state (No need to worry about Upper/Lower case!): ").upper()
+    while True:
+        func_input = input("Please enter a city, a 5-digit zip code, or type 'exit' to quit: ").strip()
+        
+        # Exit condition
+        if func_input.lower() in ["exit", "quit", "q", "kill"]:
+            socket.send_string("exit")
+            print("Exiting the send function.")
+            break
 
-        zip_code_result = zcdb.find_zip(city=func_input, state=state_input)
-        if zip_code_result:
-            zip_code = zip_code_result[0].zip
+        elif func_input.isdigit() and len(func_input) == 5:
+            zip_code = func_input
         else:
-            print("No ZIP code found for the given input.")
-            socket.close()
-            context.term()
-            return
+            state_input = input("Please enter the 2-character abbreviation for the state: ").upper().strip()
+            while state_input not in state_abbreviations:
+                state_input = input("Invalid State entry. Please enter a valid 2-character abbreviation: ").upper().strip()
 
-    # Send the zip code to the specified server
-    socket.send_string(zip_code)
-    response = socket.recv_string()  # Wait for response (optional)
-    print(f"Response from server: {response}")
+            zip_code_result = zcdb.find_zip(city=func_input, state=state_input)
+            if zip_code_result:
+                zip_code = zip_code_result[0].zip
+            else:
+                print("No ZIP code found for the given input.")
+                continue
 
-    # Close the socket and terminate the context
+        # Send the zip code to the specified server
+        socket.send_string(zip_code)
+        response = socket.recv_string()  # Wait for response (optional)
+        print(f"Response from server: {response}")
+
+    # Close the socket and terminate the context when done
     socket.close()
     context.term()
 
 if __name__ == "__main__":
-    # zmq_address_input = "tcp://localhost:5555"
-    # zmq_address_input = "tcp://127.0.0.1:5555"
-    # usr_input = input("Please enter a city, or a 5-digit zip code: ")
-    # send(usr_input, zmq_address_input)
-    # send(usr_input)
     send()
