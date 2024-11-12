@@ -35,6 +35,10 @@ def send():
             state_input = input("Please enter the 2-character abbreviation for the state: ").upper().strip()
             while state_input not in state_abbreviations:
                 state_input = input("Invalid State entry. Please enter a valid 2-character abbreviation: ").upper().strip()
+            if state_input in ["exit", "quit", "q", "kill"]:
+                socket.send_string("exit")
+                print("Exiting the send function.")
+                break
 
             zip_code_result = zcdb.find_zip(city=func_input, state=state_input)
             if zip_code_result:
