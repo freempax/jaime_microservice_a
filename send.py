@@ -69,4 +69,58 @@ if __name__ == "__main__":
     usr_input = input("Please enter a city, or a zip code: ")
     send(usr_input, zmq_address_input)
 
+
+
+
+
+
+
+
+
+
+
+
+import pandas as pd
+from pyzipcode import ZipCodeDatabase
+import zmq
+
+def send(func_input, zmq_address):
+    zcdb = ZipCodeDatabase()
+    
+    state_abbreviations = [
+    "AL", "AK", "AZ", "AR", "CA", "CO", "CT", "DE", "FL", "GA", "HI", "ID", "IL", "IN", "IA", "KS", 
+    "KY", "LA", "ME", "MD", "MA", "MI", "MN", "MS", "MO", "MT", "NE", "NV", "NH", "NJ", "NM", "NY", 
+    "NC", "ND", "OH", "OK", "OR", "PA", "RI", "SC", "SD", "TN", "TX", "UT", "VT", "VA", "WA", "WV", 
+    "WI", "WY"]
+
+    if func_input.isdigit():
+        zip_code = func_input
+        return zip_code
+    else:
+        state_input = input("Please enter 2 character abbreviation for the state (No need to worry about Upper/Lower case!): ").upper()
+        # if state not in state_abbreviations:
+        while state_input not in state_abbreviations:
+            state_input = input("Invalid State entry.\nPlease enter 2 character abbreviation for the state (No need to worry about Upper/Lower case!): ").upper()
+        zip_code = zcdb.find_zip(city=func_input, state=state_input)
+        if zip_code:
+            zip_code = zip_code[0].zip
+            context = zmq.Context()
+            socket = context.socket(zmq.REQ)  # Use REQ to send a request
+            socket.connect(zmq_address)
+            socket.send_string(zip_code)
+            # Wait for a response (optional)
+            response = socket.recv_string()
+            print(f"Response from server: {response}")
+        else:
+            print("No ZIP code found for the given input.")
+    # Close the socket and terminate the context
+        socket.close()
+        context.term()
+
+
+if __name__ == "__main__":
+    zmq_address_input = "tcp://localhost:5555"
+    usr_input = input("Please enter a city, or a zip code: ")
+    send(usr_input, zmq_address_input)
+
     
