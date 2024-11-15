@@ -27,10 +27,7 @@ def receive():
             message = int(message)
             matching_zone = df.loc[df['zipcode'] == message, 'zone'].values[0]
             if matching_zone:
-                # matching_zips = df.loc[df['zone'] == matching_zone].head(5),'zipcode'
-                # matching_zips = df.loc[df['zone'] == matching_zone, 'zipcode'].head(5).reset_index(drop=True).astype(str).str.zfill(5) # Works
                 matching_zips = df.loc[df['zone'] == matching_zone, 'zipcode'].head(5).astype(str).str.zfill(5).reset_index(drop=True)
-                # print(matching_zips)
                 matching_zips_json = matching_zips.to_json()
                 socket.send_string(matching_zips_json)
                 print(f"Response Message Sent: {matching_zips_json}")

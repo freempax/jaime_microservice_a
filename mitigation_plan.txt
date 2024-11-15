@@ -1,0 +1,12 @@
+For which teammate did you implement “Microservice A”?
+    A. Jamie Bartels
+
+What is the current status of the microservice? Hopefully, it’s done!
+    A. Complete!
+
+How is your teammate going to access your microservice? Should they get your code from GitHub (if so, provide a link to your public or private repo)? Should they run your code locally? Is your microservice hosted somewhere? Etc.
+    A. Jamie is able to pull my code from Github at this link. 
+
+If your teammate cannot access/call YOUR microservice, what should they do? Can you be available to help them? What’s your availability?
+If your teammate cannot access/call your microservice, by when do they need to tell you?
+Is there anything else your teammate needs to know? Anything you’re worried about? Any assumptions you’re making? Any other mitigations / backup plans you want to mention or want to discuss with your teammate?
