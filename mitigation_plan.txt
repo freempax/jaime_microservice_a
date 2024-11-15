@@ -8,5 +8,10 @@ How is your teammate going to access your microservice? Should they get your cod
     A. Jamie is able to pull my code from Github at this link. 
 
 If your teammate cannot access/call YOUR microservice, what should they do? Can you be available to help them? What’s your availability?
+    A. If Jamie has any issues with the microservice, they can reach out to me via Discord, and I will respond within 24 hours. 
+
 If your teammate cannot access/call your microservice, by when do they need to tell you?
+    A. If Jamie is having issues with the code, they should let me know what error they are getting when they attempt to run it, and copy and paste that message to me, so I can attempt to replicate/resolve the issue. 
+
 Is there anything else your teammate needs to know? Anything you’re worried about? Any assumptions you’re making? Any other mitigations / backup plans you want to mention or want to discuss with your teammate?
+    A. No other information needed. 
