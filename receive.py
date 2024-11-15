@@ -30,7 +30,9 @@ def receive():
         elif message.isdigit():
             message = int(message)
             matching_zone = df.loc[df['zipcode'] == message, 'zone'].values[0]
+            print(f"Input received {message}")
             if matching_zone:
+                print(f"The Temperature Zone for this zip code {message} is {matching_zone}")
                 matching_zips = df.loc[df['zone'] == matching_zone, 'zipcode'].head(5).astype(str).str.zfill(5).reset_index(drop=True)
                 matching_zips_json = matching_zips.to_json()
                 socket.send_string(matching_zips_json)
