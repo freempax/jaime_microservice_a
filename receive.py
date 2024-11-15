@@ -5,6 +5,10 @@ import pandas as pd
 
 
 def receive():
+    """
+    This function receives the zip code from send.py and returns back the first 5 matching zip codes that match the zone received. 
+    """
+
     context = zmq.Context()
     socket = context.socket(zmq.REP)  # Use REP to receive requests
     socket.bind("tcp://localhost:5555")
