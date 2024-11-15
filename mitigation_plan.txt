@@ -14,4 +14,4 @@ If your teammate cannot access/call your microservice, by when do they need to t
     A. If Jamie is having issues with the code, they should let me know what error they are getting when they attempt to run it, and copy and paste that message to me, so I can attempt to replicate/resolve the issue. 
 
 Is there anything else your teammate needs to know? Anything you’re worried about? Any assumptions you’re making? Any other mitigations / backup plans you want to mention or want to discuss with your teammate?
-    A. No other information needed. 
+    A. If you need to exit from the server, and the program, enter quit, q, or exit. It should end both the send, and receive scripts. 
